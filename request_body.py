@@ -35,5 +35,8 @@ async def create_item(
 
 
 @app.put("/items/{item_id}")
-async def update_item(item_id: str, item: Item):
-    return {"item_id": item_id, **item.dict()}
+async def update_item(item_id: str, item: Item, q: Optional[str] = None):
+    res = {"item_id": item_id, **item.dict()}
+    if q:
+        res.update({"q": q})
+    return res
