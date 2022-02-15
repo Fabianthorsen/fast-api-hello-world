@@ -35,3 +35,14 @@
 - [ ] Static Files
 - [ ] Testing
 - [ ] Debugging
+
+## How to run code examples
+
+- Download `FastAPI` by running `pip install "FastAPI[all]"`
+
+To run the `.py` files, run the following after downloading `FastAPI`
+```sh
+uvicorn file_name:app --reload
+```
+- Replace `file_name` with .py file name 
+- `--reload` is an optional flag to have the server reload on save
