@@ -66,3 +66,10 @@ async def get_model(model_name: ModelName):
 @app.get("/files/{file_path:path}")
 async def read_file(file_path: str):
     return {"file_path": file_path}
+
+
+# Required query parameters
+@app.get("/items/needy/{item_id}")
+async def get_item(item_id: str, needy: str):
+    item = {"item_id": item_id, "needy": needy}
+    return item
