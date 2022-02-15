@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from typing import Optional
 
 from enum import Enum
 
@@ -11,14 +12,32 @@ class ModelName(str, Enum):
     lenet = "lenet"
 
 
+fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
+
+# root route
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/items/{item_id}")
-async def read_item(item_id: int):
+# Using query params: localhost:8000/items?skip=x&limit=y
+@app.get("/items/")
+async def read_items(item_id: str, q: Optional[str] = None):
+    if q:
+        return {"item_id": item_id, "q": q}
     return {"item_id": item_id}
+
+
+# Query parameter type conversion
+@app.get("/items/{item_id}")
+async def read_item(item_id: str, q: Optional[str] = None, short: bool = False):
+    item = {"item_id": item_id}
+    if q:
+        item.update({"q": q})
+    if not short:
+        item.update({"description": "This was an amazing item with a long description"})
+
+    return item
 
 
 @app.get("users/me")
@@ -31,6 +50,7 @@ async def read_user_id(user_id: int):
     return {"user_id": user_id}
 
 
+# Using an enum class to compare
 @app.get("/models/{model_name}")
 async def get_model(model_name: ModelName):
     if model_name == ModelName.alexnet:
